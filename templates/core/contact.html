@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Contact — Grey Academy{% endblock %}
+
+{% block content %}
+  <section class="section text-center" style="padding-top:150px; background:var(--color-bg-soft);">
+    <div class="container reveal" style="max-width:680px;margin:0 auto;">
+      <span class="eyebrow" style="color:var(--color-maroon-500); border-color:var(--color-maroon-300); background:var(--color-maroon-100);">Get in touch</span>
+      <h1 style="margin-top:16px;">Questions about a track? Talk to us</h1>
+      <p>Admissions, partnerships, press — send a note and a real human replies within a day.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width:560px;">
+      {# NOTE: this form isn't wired to a backend yet — hook it up to a view      #}
+      {# + email send (or a Contact model) whenever you're ready to make it live. #}
+      <form class="reveal">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5" required
+            style="width:100%; padding:12px 14px; border-radius:8px; border:1.5px solid var(--color-grey-300); font-family:inherit;"
+            placeholder="How can we help?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Send message</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

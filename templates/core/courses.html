@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Courses — Grey Academy{% endblock %}
+
+{% block content %}
+  <section class="section text-center" style="padding-top:150px; background:var(--color-bg-soft);">
+    <div class="container reveal" style="max-width:680px;margin:0 auto;">
+      <span class="eyebrow" style="color:var(--color-maroon-500); border-color:var(--color-maroon-300); background:var(--color-maroon-100);">Programmes</span>
+      <h1 style="margin-top:16px;">Pick the track that fits your future</h1>
+      <p>Each track runs as a tutor-led cohort with weekly projects, reviews and a shared materials library.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {% for t in tracks %}
+        <div class="course-card reveal">
+          <div>
+            <p class="tag" style="background:var(--color-maroon-100); color:var(--color-maroon-700);">{{ t.tagline }}</p>
+            <h2 style="margin-top:12px;">{{ t.name }}</h2>
+            <p>{{ t.blurb }}</p>
+            <div style="margin-top:16px;">
+              {% for skill in t.skills %}
+                <span class="tag">{{ skill }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="course-side">
+            <div style="font-weight:600; color:var(--color-grey-700);">⏱ {{ t.duration }} · hybrid</div>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-primary btn-block">Enroll in {{ t.name }} →</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

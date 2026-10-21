@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Get Started — Grey Academy{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="text-center" style="max-width:700px; margin:0 auto 48px;">
+      <h1>Start your Grey Academy journey</h1>
+      <p>Choose the registration option that applies to you.</p>
+    </div>
+
+    <div class="grid-2">
+      <article class="card">
+        <h2>Grey Academy Student</h2>
+        <p>Choose a technology course and pay a fixed one-time fee of ₦100,000.</p>
+        <a class="btn btn-primary"
+           href="{% url 'payments:registration' 'academy' %}">
+          Continue as Grey Academy Student
+        </a>
+      </article>
+
+      <article class="card">
+        <h2>SIWES Student</h2>
+        <p>Register for SIWES, upload your school letter, and pay a fixed fee of ₦50,000.</p>
+        <a class="btn btn-primary"
+           href="{% url 'payments:registration' 'siwes' %}">
+          Continue as SIWES Student
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

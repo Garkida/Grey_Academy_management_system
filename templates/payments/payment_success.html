@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Confirmed — Grey Academy{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container text-center" style="max-width:680px;">
+    <h1>Payment confirmed</h1>
+
+    <p>
+      Your payment for {{ enrollment.course_name }} has been confirmed.
+    </p>
+
+    {% if enrollment.user %}
+      <a class="btn btn-primary"
+         href="{% url 'payments:registration_documents' %}">
+        View registration documents
+      </a>
+    {% else %}
+      <p>
+        We sent an account-setup link to
+        <strong>{{ enrollment.email }}</strong>.
+      </p>
+      <p>
+        In development, the email link appears in the terminal running Django.
+      </p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

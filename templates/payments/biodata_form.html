@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Registration Form — Grey Academy{% endblock %}
+
+{% block extra_head %}
+<style>
+  body {
+    background: #f3f2f0;
+  }
+
+  .print-document {
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 50px;
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    border-bottom: 2px solid #943549;
+    padding-bottom: 20px;
+  }
+
+  .passport-photo {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border: 1px solid #777;
+  }
+
+  .form-logo {
+    width: 90px;
+    height: auto;
+  }
+
+  @media print {
+    body {
+      background: #fff;
+    }
+
+    .navbar, .footer, .messages, .print-button {
+      display: none !important;
+    }
+
+    .print-document {
+      border: none;
+      box-shadow: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="print-document">
+  <div class="print-header">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <img src="{% static 'img/greysoft-logo.png' %}"
+           class="form-logo"
+           alt="Grey Academy logo">
+      <div>
+        <h1>Grey Academy</h1>
+        <h2>Student Registration and Payment Confirmation</h2>
+      </div>
+    </div>
+
+    <img src="{{ enrollment.passport_photo.url }}"
+         class="passport-photo"
+         alt="Student passport photograph">
+  </div>
+
+  <p><strong>Registration Number:</strong> {{ enrollment.registration_number }}</p>
+  <p><strong>Full Name:</strong> {{ enrollment.first_name }} {{ enrollment.last_name }}</p>
+  <p><strong>Email:</strong> {{ enrollment.email }}</p>
+  <p><strong>Phone:</strong> {{ enrollment.phone_number }}</p>
+  <p><strong>Student Type:</strong> {{ enrollment.get_student_type_display }}</p>
+  <p><strong>Selected Course:</strong> {{ enrollment.course_name }}</p>
+  <p><strong>Amount Paid:</strong> ₦{{ enrollment.amount }}</p>
+  <p><strong>Payment Date:</strong> {{ enrollment.paid_at|date:"F j, Y" }}</p>
+  <p><strong>Physical Verification:</strong> {{ enrollment.get_physical_status_display }}</p>
+
+  {% if enrollment.student_type == "siwes" %}
+    <hr>
+    <h3>SIWES Information</h3>
+    <p><strong>Institution:</strong> {{ enrollment.institution_name }}</p>
+    <p><strong>Course of Study:</strong> {{ enrollment.course_of_study }}</p>
+    <p><strong>Matric Number:</strong> {{ enrollment.matric_number }}</p>
+  {% endif %}
+
+  <p style="margin-top:40px;">
+    Present this document at Grey Academy for physical verification.
+  </p>
+
+  <button class="btn btn-primary print-button"
+          onclick="window.print()">
+    Print form
+  </button>
+</div>
+{% endblock %}

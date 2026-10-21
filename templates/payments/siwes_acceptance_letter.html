@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SIWES Acceptance Letter — Grey Academy{% endblock %}
+
+{% block extra_head %}
+<style>
+  .letter {
+    max-width: 820px;
+    margin: 40px auto;
+    padding: 55px;
+    background: #fff;
+    color: #111;
+    font-family: Georgia, serif;
+  }
+
+  .letter-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 45px;
+  }
+
+  .letter-logo {
+    width: 160px;
+    height: auto;
+  }
+
+  .signature {
+    width: 130px;
+    height: auto;
+  }
+
+  .letter-footer {
+    margin-top: 50px;
+    padding-top: 15px;
+    border-top: 1px solid #bbb;
+    text-align: right;
+    font-size: 0.85rem;
+  }
+
+  @media print {
+    .navbar, .footer, .messages, .print-button {
+      display: none !important;
+    }
+
+    .letter {
+      margin: 0;
+      padding: 20px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<article class="letter">
+  <div class="letter-top">
+    <div>
+      <p>{{ enrollment.accepted_at|date:"F j, Y" }}</p>
+
+      <p>
+        The SIWES Coordinator<br>
+        {{ enrollment.institution_name }}
+      </p>
+    </div>
+
+    <img class="letter-logo"
+         src="{% static 'img/greysoft-logo.png' %}"
+         alt="Greysoft Technologies">
+  </div>
+
+  <p>Dear Sir/Ma,</p>
+
+  <p style="text-align:center; font-weight:bold;">
+    Acceptance of SIWES Placement —
+    {{ enrollment.first_name }} {{ enrollment.last_name }}
+  </p>
+
+  <p>
+    We are pleased to confirm the acceptance of
+    <strong>{{ enrollment.first_name }} {{ enrollment.last_name }}</strong>
+    (Matric No: <strong>{{ enrollment.matric_number }}</strong>)
+    for a 12-week SIWES placement at our organization.
+  </p>
+
+  <p>
+    During this period, the student will be engaged in supervised,
+    hands-on learning experiences relevant to
+    <strong>{{ enrollment.course_of_study }}</strong>.
+    The student will be guided by our team and exposed to practical
+    software-development processes and professional growth.
+  </p>
+
+  <p>
+    We appreciate the opportunity to contribute to this academic
+    journey and look forward to a successful engagement.
+  </p>
+
+  <p style="margin-top:50px;">
+    Sincerely,
+  </p>
+
+  <p>
+    <strong>Emmanuel Wordsworth</strong><br>
+    Head of Academy
+  </p>
+
+  <img class="signature"
+       src="{% static 'img/emmanuel-wordsworth-signature.png' %}"
+       alt="Emmanuel Wordsworth signature">
+
+  <footer class="letter-footer">
+    <p>
+      31, Gwari Avenue, Barnawa, Kaduna, Nigeria<br>
+      Website: www.greysoft.ng<br>
+      Email: hi@greysoft.ng<br>
+      Tel: +234 809 17 9487, +234 803 535 6090
+    </p>
+  </footer>
+  
+  <a class="btn btn-primary print-button"
+   href="{% url 'payments:download_siwes_acceptance_letter' %}">
+  Download PDF
+</a>
+
+  <button class="btn btn-primary print-button"
+          onclick="window.print()">
+    Print acceptance letter
+  </button>
+</article>
+{% endblock %}

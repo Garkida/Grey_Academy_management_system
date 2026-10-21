@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Registration Documents — Grey Academy{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:760px;">
+    <h1>Registration documents</h1>
+
+    <p>
+      Your payment has been confirmed.
+      Please print your registration documents and visit Grey Academy
+      for physical verification.
+    </p>
+
+    <p>
+      Your dashboard will become available only after an institute
+      staff member completes physical verification.
+    </p>
+
+    <p>
+      <strong>Registration number:</strong>
+      {{ enrollment.registration_number }}
+    </p>
+
+    <p>
+      <strong>Verification status:</strong>
+      {{ enrollment.get_physical_status_display }}
+    </p>
+
+    <a class="btn btn-primary"
+       href="{% url 'payments:biodata_form' %}">
+      Print registration/bio-data form
+    </a>
+
+    {% if enrollment.student_type == "siwes" %}
+      <a class="btn btn-outline"
+         href="{% url 'payments:siwes_acceptance_letter' %}">
+        Print SIWES acceptance letter
+      </a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

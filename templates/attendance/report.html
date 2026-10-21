@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Tutor Attendance Report — Grey Academy{% endblock %}
+
+{% block content %}
+<style>
+  .tutor-report {
+    padding: 40px 0;
+    background: #f2f2f1;
+    min-height: 70vh;
+  }
+
+  .tutor-report__header,
+  .tutor-report__filters,
+  .tutor-report__table-wrap {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(44, 45, 43, 0.08);
+  }
+
+  .tutor-report__header {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .tutor-report__eyebrow {
+    color: #943549;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+  }
+
+  .tutor-report__header h1 {
+    color: #2c2d2b;
+    margin: 8px 0;
+  }
+
+  .tutor-report__header p {
+    margin-bottom: 0;
+  }
+
+  .tutor-report__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 16px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .tutor-report__field label {
+    display: block;
+    margin-bottom: 6px;
+    color: #2c2d2b;
+    font-weight: 600;
+  }
+
+  .tutor-report__field input {
+    padding: 10px 12px;
+    border: 1px solid #d6d6d4;
+    border-radius: 8px;
+    font: inherit;
+  }
+
+  .tutor-report__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tutor-report__back {
+    color: #943549;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .tutor-report__table-wrap {
+    overflow-x: auto;
+  }
+
+  .tutor-report table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
+  }
+
+  .tutor-report th,
+  .tutor-report td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ececea;
+  }
+
+  .tutor-report th {
+    color: #fff;
+    background: #2c2d2b;
+  }
+
+  .tutor-report tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .tutor-report__student-name {
+    color: #2c2d2b;
+    font-weight: 700;
+  }
+
+  .tutor-report__email {
+    display: block;
+    margin-top: 4px;
+    color: #737471;
+    font-size: 0.9rem;
+  }
+
+  .tutor-report__empty {
+    padding: 24px;
+    text-align: center;
+    color: #737471;
+  }
+
+  @media (max-width: 600px) {
+    .tutor-report {
+      padding: 24px 0;
+    }
+
+    .tutor-report__header,
+    .tutor-report__filters {
+      padding: 18px;
+    }
+  }
+</style>
+
+<section class="tutor-report">
+  <div class="container">
+    <header class="tutor-report__header">
+      <span class="tutor-report__eyebrow">Tutor portal</span>
+      <h1>Attendance report</h1>
+      <p>Review attendance for students assigned to you.</p>
+    </header>
+
+    <form method="get" class="tutor-report__filters">
+      <div class="tutor-report__field">
+        <label for="attendance-start">From</label>
+        <input
+          id="attendance-start"
+          type="date"
+          name="start"
+          value="{{ start_date|date:'Y-m-d' }}"
+        >
+      </div>
+
+      <div class="tutor-report__field">
+        <label for="attendance-end">To</label>
+        <input
+          id="attendance-end"
+          type="date"
+          name="end"
+          value="{{ end_date|date:'Y-m-d' }}"
+        >
+      </div>
+
+      <div class="tutor-report__actions">
+        <button class="btn btn-primary" type="submit">Filter report</button>
+        <a class="tutor-report__back" href="{% url 'tutors:dashboard' %}">
+          Back to dashboard
+        </a>
+      </div>
+    </form>
+
+    <div class="tutor-report__table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Days attended</th>
+            <th>Attendance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td>
+                <span class="tutor-report__student-name">
+                  {{ row.student.first_name }} {{ row.student.last_name }}
+                </span>
+                <span class="tutor-report__email">{{ row.student.email }}</span>
+              </td>
+              <td>{{ row.student.course_name }}</td>
+              <td>{{ row.attended }} / {{ row.total_days }}</td>
+              <td>{{ row.percentage }}%</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td class="tutor-report__empty" colspan="4">
+                No students are assigned to you yet.
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

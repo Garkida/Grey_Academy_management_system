@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Gallery — Grey Academy{% endblock %}
+{% block description %}Meet Grey Academy students and tutors across our technology tracks.{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <header class="gallery-heading text-center">
+      <span class="eyebrow">Our community</span>
+      <h1>Grey Academy Gallery</h1>
+      <p>Meet the students who have registered and the tutors who guide them.</p>
+
+      <nav class="gallery-jump-links" aria-label="Gallery sections">
+        <a class="btn btn-outline" href="#students">Students</a>
+        <a class="btn btn-outline" href="#tutors">Tutors</a>
+      </nav>
+    </header>
+
+    <section id="students" class="gallery-section">
+      <h2>Students</h2>
+
+      {% if students %}
+        <div class="gallery-grid">
+          {% for student in students %}
+            <article class="card gallery-card">
+              {% if student.passport_photo %}
+                <img
+                  class="gallery-card-photo"
+                  src="{{ student.passport_photo.url }}"
+                  alt="{{ student.first_name }} {{ student.last_name }}"
+                >
+              {% else %}
+                <div class="gallery-card-placeholder" aria-label="No student photo"></div>
+              {% endif %}
+
+              <div class="gallery-card-details">
+                <h3>{{ student.first_name }} {{ student.last_name }}</h3>
+                <span class="tag">{{ student.course_name }}</span>
+                <p><strong>Phone:</strong> {{ student.phone_number }}</p>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No student profiles yet.</p>
+      {% endif %}
+    </section>
+
+    <section id="tutors" class="gallery-section">
+      <h2>Tutors</h2>
+
+      {% if tutors %}
+        <div class="gallery-grid">
+          {% for tutor in tutors %}
+            <article class="card gallery-card">
+              {% if tutor.photo %}
+                <img
+                  class="gallery-card-photo"
+                  src="{{ tutor.photo.url }}"
+                  alt="{{ tutor.user.get_full_name }}"
+                >
+              {% else %}
+                <div class="gallery-card-placeholder" aria-label="No tutor photo"></div>
+              {% endif %}
+
+              <div class="gallery-card-details">
+                <h3>{{ tutor.user.get_full_name|default:tutor.user.email }}</h3>
+                <span class="tag">{{ tutor.get_field_display }}</span>
+                <p><strong>Phone:</strong> {{ tutor.user.phone_number|default:"—" }}</p>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No tutor profiles yet.</p>
+      {% endif %}
+<p class="gallery-tutor-link">Tutor profiles are managed by Grey Academy.</p>
+      
+    </section>
+  </div>
+</section>
+{% endblock %}

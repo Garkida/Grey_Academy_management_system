@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Verify your email — Grey Academy{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card reveal text-center">
+    <a href="{% url 'core:home' %}" class="brand" style="justify-content:center;">
+      <img src="{% static 'img/logo-mark-trimmed.png' %}" alt="Grey Academy" />
+      Grey Academy
+    </a>
+    <h1>Check your inbox 📩</h1>
+    <p class="auth-subtitle">
+      We sent a verification link to <strong>{{ user_email }}</strong>.
+      Click it to activate your account.
+    </p>
+
+    <div class="countdown-wrap">
+      <div class="countdown-ring" id="countdown-ring">
+        <div class="countdown-inner">
+          <span id="countdown-label">01:00</span>
+        </div>
+      </div>
+      <p style="font-size:0.8rem; color:var(--color-text-muted); margin:0;">
+        This link expires 1 minute after it was sent.
+      </p>
+    </div>
+
+    <form method="post" action="{% url 'accounts:resend_verification' %}">
+      {% csrf_token %}
+      <button type="submit" id="resend-btn" class="btn btn-outline btn-block" disabled>
+        Resend verification email
+      </button>
+    </form>
+
+    <p class="auth-footer-link">
+      Wrong email? <a href="{% url 'accounts:signup' %}">Start over</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  startCountdown({{ seconds_remaining }});
+  startVerificationPoll(
+    "{% url 'accounts:verification_status' %}",
+    "{% url 'accounts:login' %}"
+  );
+</script>
+{% endblock %}

@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student Dashboard — Grey Academy{% endblock %}
+
+{% block content %}
+<div class="student-dashboard-layout">
+  <aside class="student-sidebar" id="student-sidebar">
+    <a class="student-brand" href="{% url 'core:home' %}">
+     <img class="student-brand-logo"
+     src="{% static 'img/logo-mark-trimmed.png' %}"
+     alt="">
+      <span>Grey Academy<small>Student portal</small></span>
+    </a>
+
+    <nav class="student-sidebar-nav" aria-label="Student dashboard">
+      <button class="student-nav-link is-active"
+              type="button"
+              data-dashboard-target="overview"
+              data-dashboard-title="Dashboard">
+        <span>⌂</span> Dashboard
+      </button>
+      <button class="student-nav-link"
+              type="button"
+              data-dashboard-target="tutor"
+              data-dashboard-title="My tutor">
+        <span>◎</span> My tutor
+      </button>
+      <button class="student-nav-link"
+              type="button"
+              data-dashboard-target="attendance"
+              data-dashboard-title="My attendance">
+        <span>▤</span> My attendance
+      </button>
+      <button class="student-nav-link"
+              type="button"
+              data-dashboard-target="lessons"
+              data-dashboard-title="Lessons">
+        <span>▶</span> Lessons
+      </button>
+      <button class="student-nav-link"
+              type="button"
+              data-dashboard-target="documents"
+              data-dashboard-title="Documents">
+        <span>▧</span> Documents
+      </button>
+      <button class="student-nav-link"
+              type="button"
+              data-dashboard-target="account"
+              data-dashboard-title="Account">
+        <span>◉</span> Account
+      </button>
+    </nav>
+
+    <div class="student-sidebar-account">
+      <div class="student-sidebar-user">
+        <span class="student-sidebar-avatar">
+          {{ user.first_name|default:user.email|slice:":1"|upper }}
+        </span>
+        <span class="student-sidebar-user-name">
+          <strong>{{ user.get_full_name|default:user.email }}</strong>
+          <small>Student</small>
+        </span>
+      </div>
+      <a class="student-sidebar-logout" href="{% url 'accounts:logout' %}">
+        ↪ Log out
+      </a>
+    </div>
+  </aside>
+
+  <button class="student-sidebar-overlay"
+          id="student-sidebar-overlay"
+          type="button"
+          aria-label="Close menu"
+          hidden></button>
+
+  <main class="student-dashboard-main">
+    <header class="student-dashboard-topbar">
+      <button class="student-menu-toggle"
+              id="student-menu-toggle"
+              type="button"
+              aria-label="Open dashboard menu"
+              aria-expanded="false">
+        ☰
+      </button>
+      <div>
+        <span class="dashboard-label">Grey Academy</span>
+        <h1 id="dashboard-panel-title">Dashboard</h1>
+      </div>
+    </header>
+
+    <div class="student-dashboard-panels">
+      <section class="student-dashboard-panel"
+               data-dashboard-panel="overview">
+       <div class="student-overview-card">
+  {% if enrollment.passport_photo %}
+    <img class="student-overview-photo"
+         src="{{ enrollment.passport_photo.url }}"
+         alt="{{ enrollment.first_name }} {{ enrollment.last_name }}">
+  {% endif %}
+
+  <div class="student-profile-content">
+    <span class="dashboard-label">Student profile</span>
+    <h2>{{ enrollment.first_name }} {{ enrollment.last_name }}</h2>
+
+    <div class="student-profile-tags">
+      <span class="tag">{{ enrollment.get_student_type_display }}</span>
+      <span class="tag">{{ enrollment.course_name }}</span>
+    </div>
+
+    {% if enrollment.bio %}
+      <p class="student-profile-bio">{{ enrollment.bio|linebreaksbr }}</p>
+    {% else %}
+      <p class="student-profile-bio">
+        You are registered for {{ enrollment.course_name }} at Grey Academy.
+      </p>
+    {% endif %}
+
+    <div class="student-profile-details">
+      <p><strong>Email:</strong> {{ enrollment.email }}</p>
+      <p><strong>Phone:</strong> {{ enrollment.phone_number }}</p>
+
+      {% if enrollment.student_type == "siwes" %}
+        <p><strong>Institution:</strong> {{ enrollment.institution_name|default:"—" }}</p>
+        <p><strong>Course of study:</strong> {{ enrollment.course_of_study|default:"—" }}</p>
+        <p><strong>Matric number:</strong> {{ enrollment.matric_number|default:"—" }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+        <div class="student-overview-stats">
+          <article class="student-dashboard-card">
+            <span class="dashboard-label">Course</span>
+            <strong>{{ enrollment.course_name }}</strong>
+          </article>
+          <article class="student-dashboard-card">
+            <span class="dashboard-label">Registration number</span>
+            <strong>{{ enrollment.registration_number|default:"Pending" }}</strong>
+          </article>
+          <article class="student-dashboard-card">
+            <span class="dashboard-label">Attendance records</span>
+            <strong>{{ attendance_records|length }}</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="student-dashboard-panel"
+               data-dashboard-panel="tutor"
+               hidden>
+        <article class="student-dashboard-card">
+          <span class="dashboard-label">Learning support</span>
+          <h2>My tutor</h2>
+
+          {% if tutor %}
+            <div class="student-tutor-profile">
+              {% if tutor.photo %}
+                <img class="student-tutor-photo"
+                     src="{{ tutor.photo.url }}"
+                     alt="{{ tutor.user.get_full_name }}">
+              {% else %}
+                <div class="student-tutor-placeholder" aria-hidden="true">GA</div>
+              {% endif %}
+
+              <div>
+                <h3>{{ tutor.user.get_full_name|default:tutor.user.email }}</h3>
+                <span class="tag">{{ tutor.get_field_display }}</span>
+                {% if tutor.bio %}<p>{{ tutor.bio }}</p>{% endif %}
+
+                {% if tutor.user.phone_number %}
+                  <p><strong>Phone:</strong>
+                    <a href="tel:{{ tutor.user.phone_number }}">
+                      {{ tutor.user.phone_number }}
+                    </a>
+                  </p>
+                {% endif %}
+                <p><strong>Email:</strong>
+                  <a href="mailto:{{ tutor.user.email }}">{{ tutor.user.email }}</a>
+                </p>
+              </div>
+            </div>
+          {% else %}
+            <p>A tutor has not been assigned yet. Their details will appear here once assigned.</p>
+          {% endif %}
+        </article>
+      </section>
+
+      <section class="student-dashboard-panel"
+               data-dashboard-panel="attendance"
+               hidden>
+        <article class="student-dashboard-card">
+          <span class="dashboard-label">Daily check-in</span>
+          <h2>My attendance</h2>
+          <p id="attendance-message">Mark your attendance for today.</p>
+          <button id="checkin-btn"
+                  class="btn btn-primary"
+                  type="button"
+                  onclick="checkIn()">
+            Check in for today
+          </button>
+        </article>
+
+        <article class="student-dashboard-card">
+          <h2>Attendance history</h2>
+          {% if attendance_records %}
+            <div class="student-attendance-table-wrap">
+              <table class="student-attendance-table">
+                <thead>
+                  <tr><th>Date</th><th>Time</th><th>Check-in method</th></tr>
+                </thead>
+                <tbody>
+                  {% for record in attendance_records %}
+                    <tr>
+                      <td>{{ record.date|date:"M j, Y" }}</td>
+                      <td>{{ record.checked_in_at|date:"g:i A" }}</td>
+                      <td>{{ record.get_method_display }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p>You do not have any attendance records yet.</p>
+          {% endif %}
+        </article>
+      </section>
+
+      <section class="student-dashboard-panel"
+               data-dashboard-panel="lessons"
+               hidden>
+        <article class="student-dashboard-card">
+          <span class="dashboard-label">Course updates</span>
+          <h2>Lessons from your tutor</h2>
+          {% if lessons %}
+            <div class="student-lesson-list">
+              {% for lesson in lessons %}
+                <div class="student-lesson">
+                  <h3>{{ lesson.title }}</h3>
+                  <a href="{{ lesson.video_url }}" target="_blank" rel="noopener">
+                    Open lesson
+                  </a>
+                  {% if lesson.message %}<p>{{ lesson.message }}</p>{% endif %}
+                  <small>{{ lesson.created_at|date:"F j, Y" }}</small>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p>Your tutor’s lessons will appear here.</p>
+          {% endif %}
+        </article>
+      </section>
+
+      <section class="student-dashboard-panel"
+               data-dashboard-panel="documents"
+               hidden>
+        <article class="student-dashboard-card">
+          <span class="dashboard-label">Student resources</span>
+          <h2>Documents</h2>
+          <div class="student-document-links">
+            <a class="btn btn-outline" href="{% url 'payments:biodata_form' %}">
+              View bio-data form
+            </a>
+            {% if enrollment.student_type == "siwes" %}
+              <a class="btn btn-outline"
+                 href="{% url 'payments:siwes_acceptance_letter' %}">
+                View SIWES acceptance letter
+              </a>
+            {% endif %}
+          </div>
+        </article>
+      </section>
+
+      <section class="student-dashboard-panel"
+               data-dashboard-panel="account"
+               hidden>
+        <article class="student-dashboard-card">
+          <span class="dashboard-label">Your account</span>
+          <h2>Account details</h2>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Phone:</strong> {{ user.phone_number|default:"—" }}</p>
+          <a class="btn btn-outline" href="{% url 'accounts:password_change' %}">
+            Change password
+          </a>
+        </article>
+      </section>
+    </div>
+  </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const dashboardLinks = document.querySelectorAll("[data-dashboard-target]");
+const dashboardPanels = document.querySelectorAll("[data-dashboard-panel]");
+const panelTitle = document.getElementById("dashboard-panel-title");
+const sidebar = document.getElementById("student-sidebar");
+const menuToggle = document.getElementById("student-menu-toggle");
+const sidebarOverlay = document.getElementById("student-sidebar-overlay");
+
+dashboardLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    const target = link.dataset.dashboardTarget;
+
+    dashboardLinks.forEach((item) => {
+      item.classList.toggle("is-active", item === link);
+    });
+
+    dashboardPanels.forEach((panel) => {
+      panel.hidden = panel.dataset.dashboardPanel !== target;
+    });
+
+    if (panelTitle) {
+      panelTitle.textContent = link.dataset.dashboardTitle;
+    }
+
+    sidebar.classList.remove("is-open");
+    sidebarOverlay.hidden = true;
+    menuToggle.setAttribute("aria-expanded", "false");
+  });
+});
+
+menuToggle.addEventListener("click", () => {
+  const isOpen = sidebar.classList.toggle("is-open");
+  sidebarOverlay.hidden = !isOpen;
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
+sidebarOverlay.addEventListener("click", () => {
+  sidebar.classList.remove("is-open");
+  sidebarOverlay.hidden = true;
+  menuToggle.setAttribute("aria-expanded", "false");
+});
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+function checkIn() {
+  const btn = document.getElementById("checkin-btn");
+  const msg = document.getElementById("attendance-message");
+
+  btn.disabled = true;
+  msg.textContent = "Checking in...";
+
+  const sendCheckIn = (latitude, longitude) => {
+    fetch("{% url 'attendance:check_in' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: JSON.stringify({ latitude, longitude }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        msg.textContent = data.message;
+        if (data.status === "success" || data.status === "already_checked_in") {
+          btn.style.display = "none";
+        } else {
+          btn.disabled = false;
+        }
+      })
+      .catch(() => {
+        msg.textContent = "Something went wrong. Try again.";
+        btn.disabled = false;
+      });
+  };
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => sendCheckIn(position.coords.latitude, position.coords.longitude),
+      () => sendCheckIn(null, null),
+      { timeout: 8000 }
+    );
+  } else {
+    sendCheckIn(null, null);
+  }
+}
+</script>
+{% endblock %}

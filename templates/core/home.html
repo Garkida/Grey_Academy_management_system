@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Grey Academy — Learn Frontend, Backend, Cyber Security & Data{% endblock %}
+{% block description %}Grey Academy trains developers, security analysts and data professionals with hands-on tutoring and course dashboards.{% endblock %}
+
+{% block content %}
+
+  {# ---------------------------------------------------------------- #}
+  {# HERO — background video from the Greysoft Demo Day clip           #}
+  {# ---------------------------------------------------------------- #}
+  <section class="hero">
+    <video autoplay muted loop playsinline>
+      <source src="{% static 'video/hero.mp4' %}" type="video/mp4" />
+    </video>
+
+    <div class="container">
+      <div class="hero-content">
+        <span class="eyebrow animate-fade-in"> Admissions open</span>
+        <h1 class="animate-fade-in">
+          BUILD <span class="accent">INDUSTRY-READY SKILLS</span>,
+          REAL PROJECTS, AND A CAREER <span class="accent">YOU’RE PROUD OF.</span>
+        </h1>
+        <p class="animate-fade-in">
+          Grey Academy is a tutor-led tech hub. You leave with lots of projects,
+          not just certificates,  guided every step by a tutor who knows your name and understands you well.
+        </p>
+        <div class="hero-actions animate-fade-in">
+         <a href="{% url 'payments:get_started' %}" class="btn btn-primary"> Get started →
+</a>
+          <a href="{% url 'core:courses' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,0.4); color:#fff;">
+            Explore courses
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ---------------------------------------------------------------- #}
+  {# STATS STRIP                                                       #}
+  {# ---------------------------------------------------------------- #}
+  <div class="container">
+    <div class="stats">
+      {% for s in stats %}
+        <div class="stat-card reveal">
+          <div class="stat-value">{{ s.value }}</div>
+          <div class="stat-label">{{ s.label }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {# ---------------------------------------------------------------- #}
+  {# WHY GREY ACADEMY                                                  #}
+  {# ---------------------------------------------------------------- #}
+  <section class="section">
+    <div class="container">
+      <div class="text-center reveal" style="max-width:640px;margin:0 auto 56px;">
+        <span class="eyebrow" style="color:var(--color-maroon-500); border-color:var(--color-maroon-300); background:var(--color-maroon-100);">Why us</span>
+        <h2 style="margin-top:16px;">Built for people who actually want to build</h2>
+        <p>Every track pairs you with a tutor, a cohort, and real projects — not just video lectures.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="card reveal">
+          <div class="icon-badge">🎓</div>
+          <h3>Tutor-led cohorts</h3>
+          <p>A dedicated tutor tracks your progress and reviews your work every week.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge">✨</div>
+          <h3>Build real products</h3>
+          <p>You leave with a portfolio of shipped projects, not just certificates.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge">🛡️</div>
+          <h3>Industry-ready skills</h3>
+          <p>Curriculum rebuilt every term around what hiring teams actually ask for.</p>
+        </div>
+        <div class="card reveal">
+          <div class="icon-badge">🤝</div>
+          <h3>A hub, not a classroom</h3>
+          <p>Peer reviews, study circles and demo days keep the momentum going.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ---------------------------------------------------------------- #}
+  {# COURSE TRACKS PREVIEW                                             #}
+  {# ---------------------------------------------------------------- #}
+  <section class="section section-tight" style="background:var(--color-bg-soft);">
+    <div class="container">
+      <div class="text-center reveal" style="max-width:640px;margin:0 auto 48px;">
+        <span class="eyebrow" style="color:var(--color-maroon-500); border-color:var(--color-maroon-300); background:var(--color-maroon-100);">Programmes</span>
+        <h2 style="margin-top:16px;">Pick the track that fits your future</h2>
+      </div>
+
+      <div class="grid-4">
+        {% for t in tracks %}
+          <div class="card reveal">
+            <p class="tag" style="background:var(--color-maroon-100); color:var(--color-maroon-700);">{{ t.duration }}</p>
+            <h3>{{ t.name }}</h3>
+            <p>{{ t.tagline }}</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="text-center reveal" style="margin-top:40px;">
+        <a href="{% url 'core:courses' %}" class="btn btn-primary">See all courses →</a>
+      </div>
+    </div>
+  </section>
+
+  {# ---------------------------------------------------------------- #}
+  {# CTA BAND                                                          #}
+  {# ---------------------------------------------------------------- #}
+  <section class="section text-center">
+    <div class="container reveal">
+      <h2>Ready to start building?</h2>
+      <p style="max-width:480px;margin:0 auto 28px;">Admissions are open for the next cohort. It takes two minutes to create your account.</p>
+      <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Create your account →</a>
+    </div>
+  </section>
+
+  <div class="container py-4">
+  <h1 class="mb-3">Welcome</h1>
+  <a class="btn btn-primary" href="#">Get started</a>
+</div>
+
+{% endblock %}

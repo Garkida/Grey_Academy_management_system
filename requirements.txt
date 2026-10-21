@@ -1,0 +1,7 @@
+Django==6.1.1
+django-allauth==65.19.4
+python-decouple==3.8
+Pillow==12.3.0
+requests==2.34.2
+djangorestframework
+xhtml2pdf

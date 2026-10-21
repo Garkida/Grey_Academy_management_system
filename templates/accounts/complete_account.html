@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Complete Your Account — Grey Academy{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:600px;">
+    <h1>Complete your account</h1>
+
+    <p>
+      Payment has been confirmed for
+      {{ enrollment.course_name }}.
+      Create your password to finish registration.
+    </p>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <button class="btn btn-primary" type="submit">
+        Create account
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}
